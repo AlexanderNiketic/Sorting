@@ -2,86 +2,73 @@ package com.niketica.sorter;
 
 import java.util.ArrayList;
 
+/**
+ * This class sorts a given list of numbers via the merge sort method.
+ * @author Alexander
+ *
+ */
 public class MergeSorter extends Sorter {
 
 	public int[] sortList(int[] numberList) {
-		return splitList(numberList);
-	}
-
-	public int[] splitList(int[] numberList){
-		ArrayList<Integer> oddsAL;
-		ArrayList<Integer> evensAL;
-		int[] odds;
-		int[] evens;
+		ArrayList<Integer> numberListAL = NumberListGenerator.convertListToArrayList(numberList);
 		
-		if(numberList.length <= 1){
+		numberList = NumberListGenerator.convertArrayListToList(splitList(numberListAL));
+		
+		return numberList;
+	}
+	
+	/**
+	 * This is a recursive method that splits a list of numbers in two.
+	 * Both lists get merged again using the mergeList method and then returned.
+	 * @param numberList The list to be split.
+	 * @return The merged list.
+	 */
+	public ArrayList<Integer> splitList(ArrayList<Integer> numberList){
+		ArrayList<Integer> odds = new ArrayList<Integer>();
+		ArrayList<Integer> evens = new ArrayList<Integer>();
+		
+		if(numberList.size() <= 1){
 			return numberList;
 		}
 		
-		oddsAL = new ArrayList<Integer>();
-		evensAL = new ArrayList<Integer>();
-		
-		for(int i=0;i<numberList.length; i++){
+		for(int i=0;i<numberList.size(); i++){
 			if(i%2==0){
-				evensAL.add(numberList[i]);
+				evens.add(numberList.get(i));
 			}else{
-				oddsAL.add(numberList[i]);				
+				odds.add(numberList.get(i));				
 			}
 		}
-		
-		odds  = convertArrayListToList(oddsAL);
-		evens = convertArrayListToList(evensAL);
-		
+				
 		odds = splitList(odds);
 		evens = splitList(evens);
-		
-		oddsAL = convertListToArrayList(odds);
-		evensAL = convertListToArrayList(evens);
-		
-		return mergeList(evensAL, oddsAL);
+				
+		return mergeList(evens, odds);
 	}
 	
-	private int[] convertArrayListToList(ArrayList<Integer> numberList){
-		int[] newList = new int[numberList.size()];
-		
-		for(int i=0; i<numberList.size(); i++){
-			newList[i] = numberList.get(i);
-		}
-		
-		return newList;
-	}
-	
-	private ArrayList<Integer> convertListToArrayList(int[] numberList){
-		ArrayList<Integer> newList = new ArrayList<Integer>();
-		
-		for(int i=0; i<numberList.length; i++){
-			newList.add(numberList[i]);
-		}
-		
-		return newList;
-	}
-	
-	private int[] mergeList(ArrayList<Integer> left, ArrayList<Integer> right){
-		int[] result;
-		ArrayList<Integer> resultAL = new ArrayList<Integer>();
+	/**
+	 * This method merges two lists of numbers together into one list.
+	 * @param left One of the lists to be merged.
+	 * @param right One of the lists to be merged.
+	 * @return The merged list.
+	 */
+	private ArrayList<Integer> mergeList(ArrayList<Integer> left, ArrayList<Integer> right){
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		
 		while(left.size() > 0 && right.size() > 0){
 			if(left.get(0) <= right.get(0)){
-				resultAL.add(left.get(0));
+				result.add(left.get(0));
 				left.remove(0);
 			}else{
-				resultAL.add(right.get(0));	
+				result.add(right.get(0));	
 				right.remove(0);
 			}
 		}
 		
 		if(left.size() > 0){
-			resultAL.addAll(left);
+			result.addAll(left);
 		}else if(right.size() > 0){
-			resultAL.addAll(right);
+			result.addAll(right);
 		}
-		
-		result = convertArrayListToList(resultAL);
 				
 		return result;
 	}
