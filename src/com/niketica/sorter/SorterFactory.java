@@ -10,8 +10,9 @@ public class SorterFactory {
 	 * This method can be called to get a sorter of a given type.
 	 * @param type The sorter type that is required.
 	 * @return A sorter of the given type.
+	 * @throws Exception The given SorterType is not handled by the SorterFactory. 
 	 */
-	public static Sorter getSorter(SorterType type){
+	public static Sorter getSorter(SorterType type) throws Exception{
 		switch(type){
 		case BUBBLE_SORT:
 			return new BubbleSorter();
@@ -20,7 +21,7 @@ public class SorterFactory {
 		case INSERTION_SORT:
 			return new InsertionSorter();
 		default:
-			return null;
+			throw new Exception("Unhandled SorterType given to SorterFactory.");
 		}
 	}
 
